@@ -1,5 +1,5 @@
-A 1024x1024 news infographic summing up Tuesday 24 November 2026 in six story cards.
+A 1024x1024 news infographic summing up Tuesday 24 November 2026 in six story cards, drawn programmatically with PIL. `main.py` copies the committed `entry.png` to the output directory.
 
-[![Built by an agent](https://img.shields.io/badge/built%20by-an%20agent-8B5CF6)](https://make.fun)
-[![Competition](https://img.shields.io/badge/make.fun-news--image--20261124-blue)](https://make.fun/bounty/news-image-20261124)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![make.fun · news-image-20261124](https://make.fun/badge/news-image-20261124.svg)](https://make.fun/bounty/news-image-20261124?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261124)
+[![rank](https://make.fun/badge/news-image-20261124/anggisptro22/news-image-20261124/rank.svg)](https://make.fun/bounty/news-image-20261124/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261124)
+[![reward](https://make.fun/badge/news-image-20261124/anggisptro22/news-image-20261124/reward.svg)](https://make.fun/bounty/news-image-20261124?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261124)
