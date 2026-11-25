@@ -17,23 +17,23 @@ def F(name, size):
 
 f_mast = F("DejaVuSans-Bold.ttf", 52)
 f_sub = F("DejaVuSans.ttf", 26)
-f_tag = F("DejaVuSans-Bold.ttf", 20)
-f_head = F("DejaVuSans-Bold.ttf", 29)
-f_body = F("DejaVuSans.ttf", 21)
+f_tag = F("DejaVuSans-Bold.ttf", 18)
+f_head = F("DejaVuSans-Bold.ttf", 28)
+f_body = F("DejaVuSans.ttf", 20)
 
 STORIES = [
-    ("UKRAINE", (74, 144, 226), "Zelenskiy asks West for $125bn for 2027",
+    ("UKRAINE", (74, 144, 226), "Zelenskiy asks West for 125bn dollars for 2027",
      "Sea drones hit Russian ships off Libya, Gulf of Finland"),
-    ("MIDEAST", (230, 126, 34), "Houthis strike Riyadh's tallest tower",
+    ("MIDEAST", (230, 126, 34), "Houthis strike Riyadh tallest tower",
      "11 wounded; Saudi-backed forces press Yemen offensive"),
     ("TECH", (155, 89, 182), "Nvidia reinstates Jensen Huang as CEO",
      "Board reversal days after exit, after Trump intervention"),
     ("AFRICA", (46, 204, 113), "Gavi to buy 1.5m Ebola vaccine doses",
      "New Bundibugyo shot for the big Congo outbreak"),
     ("CLIMATE", (241, 196, 15), "EU push to fix UN climate summits",
-     "After COP31 in Türkiye collapses without a deal"),
+     "After COP31 in Turkiye collapses without a deal"),
     ("ASIA", (231, 76, 60), "China unveils new space station crew",
-     "First foreign astronaut — a Pakistani — to fly"),
+     "First foreign astronaut - a Pakistani - to fly"),
 ]
 
 def wrap(d, text, font, maxw):
@@ -51,10 +51,11 @@ def wrap(d, text, font, maxw):
 
 img = Image.new("RGB", (W, H), BG)
 d = ImageDraw.Draw(img)
-# top rule + masthead
+
+# Top rule + masthead
 d.rectangle([0, 0, W, 6], fill=(200, 60, 50))
 d.text((W // 2, 74), "TUESDAY, 24 NOVEMBER 2026", font=f_mast, fill=FG, anchor="mm")
-d.text((W // 2, 122), "THE WORLD IN ONE DAY  ·  SIX STORIES THAT MATTERED", font=f_sub, fill=DIM, anchor="mm")
+d.text((W // 2, 122), "THE WORLD IN ONE DAY - SIX STORIES THAT MATTERED", font=f_sub, fill=DIM, anchor="mm")
 d.line([40, 158, W - 40, 158], fill=(80, 85, 100), width=2)
 
 top = 178
@@ -62,19 +63,39 @@ ch = 120  # card height
 gap = 9
 for i, (tag, color, head, body) in enumerate(STORIES):
     y = top + i * (ch + gap)
+    # Card background
     d.rounded_rectangle([40, y, W - 40, y + ch], radius=10, fill=CARD)
-    d.rectangle([40, y, 48, y + ch], fill=color)
+    # Colored left edge per card
+    d.rounded_rectangle([40, y, 52, y + ch], radius=4, fill=color)
+    
+    # Region tag chip
     tw = d.textlength(tag, font=f_tag)
-    d.rounded_rectangle([68, y + 16, 68 + tw + 24, y + 46], radius=6, fill=color)
-    d.text((80, y + 31), tag, font=f_tag, fill=(20, 20, 24), anchor="lm")
-    hl = wrap(d, head, f_head, W - 200)
+    chip_w = tw + 20
+    chip_h = 28
+    chip_x = 72
+    chip_y = y + 14
+    d.rounded_rectangle([chip_x, chip_y, chip_x + chip_w, chip_y + chip_h], radius=6, fill=color)
+    d.text((chip_x + 10, chip_y + 14), tag, font=f_tag, fill=(20, 20, 24), anchor="lm")
+    
+    # Headline and sub-line positioning inside card bounds
+    # Max width for text: W - 40 (left margin) - 40 (right margin) - padding ~ left 72 -> right max ~ 984 -> max width ~ 900
+    maxw = W - 140
+    hl = wrap(d, head, f_head, maxw)
+    
+    # Draw headline (bold white, >=28px)
+    text_y = y + 50
     for j, ln in enumerate(hl):
-        d.text((68, y + 60 + j * 33), ln, font=f_head, fill=FG)
-    bl = wrap(d, body, f_body, W - 200)
-    d.text((68, y + 60 + len(hl) * 33 + 3), bl[0], font=f_body, fill=DIM)
+        d.text((72, text_y + j * 32), ln, font=f_head, fill=FG)
+    
+    # Draw one dim gray sub-line
+    sub_y = text_y + len(hl) * 32 + 6
+    bl = wrap(d, body, f_body, maxw)
+    if bl:
+        d.text((72, sub_y), bl[0], font=f_body, fill=DIM)
 
-d.line([40, H - 34, W - 40, H - 34], fill=(80, 85, 100), width=2)
-d.text((W // 2, H - 18), "make.fun · news-image-20261124 · all facts reported 24 Nov 2026", font=F("DejaVuSans.ttf", 18), fill=DIM, anchor="mm")
+# Footer
+d.line([40, H - 40, W - 40, H - 40], fill=(80, 85, 100), width=2)
+d.text((W // 2, H - 20), "make.fun - news-image-20261124 - all facts reported 24 Nov 2026", font=F("DejaVuSans.ttf", 18), fill=DIM, anchor="mm")
 
 img.save("entry.png", optimize=True)
 print("saved", os.path.getsize("entry.png"), "bytes")
